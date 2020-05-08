@@ -4,16 +4,110 @@ import (
 	"testing"
 )
 
-func Test_試作(t *testing.T) {
-	n := new(normal)
-	d := new(normal)
+// effector for test
+type dummy struct {
+}
 
-	e := n.effect(d)
+func (t dummy) effect(d effector) Effect {
+	return 1.0
+}
 
-	if e != flat {
+func (t dummy) string() string {
+	return ""
+}
+
+func Test_New(t *testing.T) {
+	ty, e := New(Fire, Water)
+	if e != nil {
 		t.Error()
 	}
+	if ty.String() != "ほのお/みず" {
+		t.Error()
+	}
+	_, err := New()
+	if err == nil {
+		t.Error()
+	}
+}
 
+func Test_New_範囲外(t *testing.T) {
+	_, e := New(20)
+	if e == nil {
+		t.Error()
+	}
+}
+
+func Test_TypesEffect(t *testing.T) {
+	a, _ := New(Fire)
+	d, _ := New(Grass, Steel)
+
+	actual := a.Effect(d)
+	if actual != 4.0 {
+		t.Error()
+	}
+}
+
+func Test_PartialMatch(t *testing.T) {
+	a, _ := New(Fairy, Dark)
+	s, _ := New(Dark)
+	e, _ := New(Poison)
+
+	if a.PartialMatch(s) == false {
+		t.Error()
+	}
+	if a.PartialMatch(e) != false {
+		t.Error()
+	}
+}
+
+func Test_toInt_登録外(t *testing.T) {
+	_, err := toInt(new(dummy))
+	if err == nil {
+		t.Error()
+	}
+}
+
+func Test_fromIntおよびtoInt(t *testing.T) {
+	names := map[Type]string{
+		Normal:   "ノーマル",
+		Fire:     "ほのお",
+		Water:    "みず",
+		Electric: "でんき",
+		Grass:    "くさ",
+		Ice:      "こおり",
+		Fighting: "かくとう",
+		Poison:   "どく",
+		Ground:   "じめん",
+		Flying:   "ひこう",
+		Psychic:  "エスパー",
+		Bug:      "むし",
+		Rock:     "いわ",
+		Ghost:    "ゴースト",
+		Dragon:   "ドラゴン",
+		Dark:     "あく",
+		Steel:    "はがね",
+		Fairy:    "フェアリー",
+	}
+
+	for k, expect := range names {
+		actual, _ := fromInt(k)
+		if actual.string() != expect {
+			t.Errorf("fromInt failed actual %s expect %s", actual.string(), expect)
+		}
+
+		j, _ := toInt(actual)
+		if j != k {
+			t.Errorf("toInt failed %T %d", actual, j)
+		}
+
+	}
+}
+
+func Test_fromInt_範囲外(t *testing.T) {
+	_, e := fromInt(20)
+	if e == nil {
+		t.Error()
+	}
 }
 
 func Test_むしタイプ相性(t *testing.T) {
@@ -498,7 +592,6 @@ func testEffects(a effector, e *testExpects, t *testing.T) {
 			t.Errorf("failed (%T) expect (%f) actual (%f)\n", d, expect, actual)
 		}
 	}
-
 }
 
 // 期待値一覧

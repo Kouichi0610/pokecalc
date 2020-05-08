@@ -14,5 +14,5 @@ func (t grass) effect(d effector) Effect {
 }
 
 func (t grass) string() string {
-	return "みず"
+	return "くさ"
 }

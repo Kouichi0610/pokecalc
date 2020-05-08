@@ -14,5 +14,5 @@ func (t fairy) effect(d effector) Effect {
 }
 
 func (t fairy) string() string {
-	return "みず"
+	return "フェアリー"
 }
