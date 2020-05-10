@@ -5,6 +5,29 @@ import (
 	"testing"
 )
 
+func Test_StatsValue(t *testing.T) {
+	s := NewStatsValue(1, 2, 3, 4, 5, 6)
+
+	if s.HP() != 1 {
+		t.Error()
+	}
+	if s.Attack() != 2 {
+		t.Error()
+	}
+	if s.Defense() != 3 {
+		t.Error()
+	}
+	if s.SpAttack() != 4 {
+		t.Error()
+	}
+	if s.SpDefense() != 5 {
+		t.Error()
+	}
+	if s.Speed() != 6 {
+		t.Error()
+	}
+}
+
 func Test_Stats(t *testing.T) {
 	l := NewLevel(50)
 	s := NewSpecies(100, 80, 50, 40, 27, 130)
