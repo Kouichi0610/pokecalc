@@ -129,3 +129,47 @@ func Test_Species(t *testing.T) {
 		t.Error()
 	}
 }
+
+func Test_Rank(t *testing.T) {
+	const s = 100
+	expects := map[rank]uint{
+		newRank(-6): 25,
+		newRank(-5): 28,
+		newRank(-4): 33,
+		newRank(-3): 40,
+		newRank(-2): 50,
+		newRank(-1): 66,
+		newRank(0):  100,
+		newRank(1):  150,
+		newRank(2):  200,
+		newRank(3):  250,
+		newRank(4):  300,
+		newRank(5):  350,
+		newRank(6):  400,
+	}
+	for r, e := range expects {
+		a := r.rankedStats(s)
+		if a != e {
+			t.Errorf("failed Rank%d Expects:%d Actual:%d", r, e, a)
+		}
+	}
+
+	if newRank(-7).rankedStats(s) != 25 {
+		t.Error()
+	}
+	if newRank(7).rankedStats(s) != 400 {
+		t.Error()
+	}
+}
+
+func Test_Ranks(t *testing.T) {
+	s := &Stats{hp: 100, at: 100, df: 100, sa: 100, sd: 100, sp: 100}
+	r := NewRanks(0, 1, -1, 2, -2)
+	e := &Stats{hp: 100, at: 100, df: 150, sa: 66, sd: 200, sp: 50}
+	a := r.RankedStats(s)
+
+	if *e != *a {
+		t.Errorf("failed Expects(%v) Actual(%v)", a, e)
+	}
+
+}
