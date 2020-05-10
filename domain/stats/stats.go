@@ -20,6 +20,18 @@ func NewStats(l Level, s *Species, i *Individual, b *BasePoints, n *nature.Natur
 	}
 }
 
+// 値を直接指定。基本テスト用
+func NewStatsValue(hp, at, df, sa, sd, sp uint) *Stats {
+	return &Stats{
+		hp: hp,
+		at: at,
+		df: df,
+		sa: sa,
+		sd: sd,
+		sp: sp,
+	}
+}
+
 func (s *Stats) HP() uint {
 	return s.hp
 }
