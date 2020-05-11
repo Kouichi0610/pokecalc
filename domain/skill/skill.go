@@ -2,6 +2,7 @@
 package skill
 
 import (
+	"pokecalc/domain/stats"
 	"pokecalc/domain/types"
 )
 
@@ -31,6 +32,8 @@ func New(t *types.Types, p uint, a uint, c Category) *Skill {
 	}
 }
 
+//func special(a *stats.Stats, d *stats.Stats) (aval, dval uint) {
+
 func (s *Skill) Types() *types.Types {
 	return s.t
 }
@@ -41,6 +44,10 @@ func (s *Skill) Power() uint {
 
 func (s *Skill) Accuracy() uint {
 	return s.a
+}
+
+func (s *Skill) PickStats(a, d *stats.Stats) (aval, dval uint) {
+	return s.c(a, d)
 }
 
 func toPicker(c Category) statsPicker {

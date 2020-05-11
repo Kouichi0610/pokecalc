@@ -3,24 +3,52 @@ package damage
 import (
 	"pokecalc/domain/skill"
 	"pokecalc/domain/stats"
-	"pokecalc/domain/types"
 )
 
 // ダメージ計算式
-// TODO:types & stats
 type Calculator struct {
 	AttackersLevel stats.Level
-	Attacker       *stats.Stats
-	AttackersType  *types.Types
+	Attacker       *Condition
 	Skill          *skill.Skill
-	Defender       *stats.Stats
-	DefendersType  *types.Types
+	Defender       *Condition
 }
 
 func New() *Calculator {
 	return &Calculator{
 		AttackersLevel: stats.NewLevel(1),
+		Attacker:       nil,
+		Skill:          nil,
+		Defender:       nil,
 	}
+}
+
+// タイプ一致＆タイプ相性補正
+func (c *Calculator) correct(d uint) uint {
+	// TODO:Effectを関数にしておきたい
+	// タイプ相性
+	effect := float32(c.Attacker.Types.Effect(c.Defender.Types))
+	d = uint(float32(d) * effect)
+
+	// タイプ一致
+	if c.Skill.Types().PartialMatch(c.Attacker.Types) {
+		d = d * 15 / 10
+	}
+	return d
+}
+
+// ダメージ計算
+func (c *Calculator) Calculate() []uint {
+	l := uint(c.AttackersLevel)
+	s := c.Skill.Power()
+
+	a, d := c.Skill.PickStats(c.Attacker.Stats, c.Defender.Stats)
+	res := calcArray(l, s, a, d)
+
+	for i := 0; i < len(res); i++ {
+		res[i] = c.correct(res[i])
+	}
+
+	return res
 }
 
 /*
