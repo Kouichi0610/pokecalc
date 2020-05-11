@@ -3,6 +3,7 @@ package damage
 import (
 	"pokecalc/domain/skill"
 	"pokecalc/domain/stats"
+	"pokecalc/domain/types"
 )
 
 // ダメージ計算式
@@ -22,21 +23,21 @@ func New() *Calculator {
 	}
 }
 
-// タイプ一致＆タイプ相性補正
-func (c *Calculator) correct(d uint) uint {
-	// TODO:Effectを関数にしておきたい
-	// タイプ相性
-	effect := float32(c.Attacker.Types.Effect(c.Defender.Types))
-	d = uint(float32(d) * effect)
-
-	// タイプ一致
-	if c.Skill.Types().PartialMatch(c.Attacker.Types) {
-		d = d * 15 / 10
+func (c *Calculator) Enable() bool {
+	if c.Attacker == nil {
+		return false
 	}
-	return d
+	if c.Defender == nil {
+		return false
+	}
+	if c.Skill == nil {
+		return false
+	}
+	return true
 }
 
 // ダメージ計算
+// TODO:計算式については要検証。特に計算順
 func (c *Calculator) Calculate() []uint {
 	l := uint(c.AttackersLevel)
 	s := c.Skill.Power()
@@ -45,10 +46,28 @@ func (c *Calculator) Calculate() []uint {
 	res := calcArray(l, s, a, d)
 
 	for i := 0; i < len(res); i++ {
-		res[i] = c.correct(res[i])
+		res[i] = correct(res[i], c.Skill.Types(), c.Attacker.Types, c.Defender.Types)
 	}
 
 	return res
+}
+
+/*
+	タイプ一致＆タイプ相性補正
+	dmg ダメージ
+	s わざタイプ
+	a 攻撃側タイプ
+	d 防御側タイプ
+*/
+func correct(dmg uint, s, a, d *types.Types) uint {
+	// わざ->防御タイプ相性
+	se := float32(s.Effect(d))
+	// わざと攻撃側のタイプ一致
+	var te float32 = 1.0
+	if a.PartialMatch(s) {
+		te = 1.5
+	}
+	return uint(float32(dmg) * se * te)
 }
 
 /*
