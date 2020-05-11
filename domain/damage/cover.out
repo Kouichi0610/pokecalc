@@ -1,0 +1,19 @@
+mode: set
+pokecalc/domain/damage/damage.go:17.24,24.2 1 1
+pokecalc/domain/damage/damage.go:26.36,27.23 1 1
+pokecalc/domain/damage/damage.go:30.2,30.23 1 1
+pokecalc/domain/damage/damage.go:33.2,33.20 1 1
+pokecalc/domain/damage/damage.go:36.2,36.13 1 1
+pokecalc/domain/damage/damage.go:27.23,29.3 1 1
+pokecalc/domain/damage/damage.go:30.23,32.3 1 1
+pokecalc/domain/damage/damage.go:33.20,35.3 1 0
+pokecalc/domain/damage/damage.go:40.41,47.32 5 1
+pokecalc/domain/damage/damage.go:51.2,51.12 1 1
+pokecalc/domain/damage/damage.go:47.32,49.3 1 1
+pokecalc/domain/damage/damage.go:61.51,66.23 3 1
+pokecalc/domain/damage/damage.go:69.2,69.37 1 1
+pokecalc/domain/damage/damage.go:66.23,68.3 1 1
+pokecalc/domain/damage/damage.go:79.33,83.2 3 1
+pokecalc/domain/damage/damage.go:89.40,92.37 2 1
+pokecalc/domain/damage/damage.go:97.2,97.12 1 1
+pokecalc/domain/damage/damage.go:92.37,96.3 3 1
