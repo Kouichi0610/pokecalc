@@ -30,6 +30,20 @@ func Test_New(t *testing.T) {
 	}
 }
 
+func Test_NewError(t *testing.T) {
+	_, e := New(None)
+	if e == nil {
+		t.Error()
+	}
+}
+
+func Test_NewWithNone(t *testing.T) {
+	ty, _ := New(Grass, None)
+	if len(ty.t) != 1 {
+		t.Error()
+	}
+}
+
 func Test_New_範囲外(t *testing.T) {
 	_, e := New(20)
 	if e == nil {
