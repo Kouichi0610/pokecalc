@@ -48,11 +48,18 @@ func New(args ...Type) (*Types, error) {
 	res.t = make([]effector, 0)
 
 	for _, n := range args {
+		if n == None {
+			continue
+		}
 		ty, err := fromInt(n)
 		if err != nil {
 			return nil, err
 		}
 		res.t = append(res.t, ty)
+	}
+
+	if len(res.t) == 0 {
+		return nil, fmt.Errorf("no type.")
 	}
 	return res, nil
 }
