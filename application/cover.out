@@ -1,0 +1,13 @@
+mode: set
+pokecalc/application/battleservice.go:19.60,27.2 2 1
+pokecalc/application/battleservice.go:29.66,31.16 2 1
+pokecalc/application/battleservice.go:35.2,40.16 5 1
+pokecalc/application/battleservice.go:43.2,47.16 4 1
+pokecalc/application/battleservice.go:50.2,53.41 3 1
+pokecalc/application/battleservice.go:31.16,33.3 1 0
+pokecalc/application/battleservice.go:40.16,42.3 1 0
+pokecalc/application/battleservice.go:47.16,49.3 1 0
+pokecalc/application/battlestats.go:18.53,26.2 2 1
+pokecalc/application/battlestats.go:28.67,30.16 2 1
+pokecalc/application/battlestats.go:33.2,37.56 4 1
+pokecalc/application/battlestats.go:30.16,32.3 1 0

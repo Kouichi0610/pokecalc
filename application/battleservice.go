@@ -3,76 +3,52 @@ package battle
 import (
 	"fmt"
 	"pokecalc/domain/damage"
-	"pokecalc/domain/nature"
-	"pokecalc/domain/skill"
 	"pokecalc/domain/stats"
-	"pokecalc/domain/types"
 	SK "pokecalc/infrastructure/repository/skill"
-	SP "pokecalc/infrastructure/repository/species"
 )
 
+var defaultLevel stats.Level = stats.NewLevel(50)
+
 type BattleService struct {
-	lv       stats.Level
-	attacker uint
-	an       nature.Name
-	ab       *stats.BasePoints
-	defender uint
-	dn       nature.Name
-	db       *stats.BasePoints
-	skill    uint
+	Attacker *BattleStats
+	Defender *BattleStats
+	Skill    string
 	skr      SK.Repository
-	spr      SP.Repository
 }
 
-func New(species SP.Repository, skills SK.Repository) *BattleService {
+func NewBattleService(skills SK.Repository) *BattleService {
 	res := &BattleService{
-		lv:       stats.NewLevel(50),
-		attacker: 0,
-		defender: 0,
-		skill:    0,
-		an:       nature.Bashful,
-		dn:       nature.Bashful,
+		Attacker: nil,
+		Defender: nil,
+		Skill:    "",
 		skr:      skills,
-		spr:      species,
 	}
 	return res
 }
 
 func (b *BattleService) Calculator() (*damage.Calculator, error) {
-	skill, err := b.skr.Load(b.skill)
+	skill, err := b.skr.Load(b.Skill)
 	if err != nil {
-		return nil, fmt.Errorf("no skill %d", b.skill)
+		return nil, fmt.Errorf("no skill %s", b.Skill)
 	}
 
 	res := damage.New()
-	res.AttackersLevel = b.lv
+	res.AttackersLevel = defaultLevel
+	res.Skill = skill
 
-	return nil, fmt.Errorf("no condition.")
-}
-
-// 種族IDから能力値を返す
-func (b *BattleService) stats(id uint, bs *stats.BasePoints, na nature.Name) (*stats.Stats, *types.Types, error) {
-	sp, ty, err := b.spr.Load(id)
+	as, at, err := b.Attacker.stats()
 	if err != nil {
-		return nil, nil, fmt.Errorf("species %d not found.", id)
+		return nil, fmt.Errorf("no attacker %s", b.Attacker.Name)
 	}
-	in := stats.NewIndividual(31, 31, 31, 31, 31, 31)
-	lv := b.lv
-	nt := nature.New(na)
+	res.AttackerStats = as
+	res.AttackerType = at
 
-	return stats.NewStats(lv, sp, in, bs, nt), ty, nil
+	ds, dt, err := b.Defender.stats()
+	if err != nil {
+		return nil, fmt.Errorf("no defender %s", b.Defender.Name)
+	}
+	res.DefenderStats = ds
+	res.DefenderType = dt
+
+	return res, fmt.Errorf("no condition.")
 }
-
-/*
-必要なもの
-(レベルは50で、個体値はさいこう固定で)
-・攻撃側ID
-　基礎ポイント
-　性格
-・防御側ID
-　基礎ポイント
-　性格
-・わざ
-
-
-*/
