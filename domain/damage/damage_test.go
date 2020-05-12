@@ -8,6 +8,7 @@ import (
 	"testing"
 )
 
+// 全て揃うまでDisableであること
 func Test_New(t *testing.T) {
 	c := New()
 	if c.Enable() {
@@ -19,14 +20,20 @@ func Test_New(t *testing.T) {
 		t.Error()
 	}
 	at, _ := types.New(types.Fire)
-	as := stats.NewStatsValue(100, 100, 100, 100, 100, 100)
-	c.Attacker = &Condition{Types: at, Stats: as}
+	c.AttackerType = at
+	if c.Enable() {
+		t.Error()
+	}
+	c.AttackerStats = stats.NewStatsValue(100, 100, 100, 100, 100, 100)
 	if c.Enable() {
 		t.Error()
 	}
 	dt, _ := types.New(types.Fire)
-	ds := stats.NewStatsValue(100, 100, 100, 100, 100, 100)
-	c.Defender = &Condition{Types: dt, Stats: ds}
+	c.DefenderType = dt
+	if c.Enable() {
+		t.Error()
+	}
+	c.DefenderStats = stats.NewStatsValue(100, 100, 100, 100, 100, 100)
 	if !c.Enable() {
 		t.Error()
 	}
@@ -39,12 +46,12 @@ func Test_Calculate(t *testing.T) {
 	c.Skill = skill.New(st, 120, 80, skill.Physical)
 
 	at, _ := types.New(types.Electric)
-	as := stats.NewStatsValue(100, 180, 80, 35, 80, 200)
-	c.Attacker = &Condition{Types: at, Stats: as}
+	c.AttackerType = at
+	c.AttackerStats = stats.NewStatsValue(100, 180, 80, 35, 80, 200)
 
 	dt, _ := types.New(types.Water, types.Flying)
-	ds := stats.NewStatsValue(300, 20, 40, 40, 250, 30)
-	c.Defender = &Condition{Types: dt, Stats: ds}
+	c.DefenderType = dt
+	c.DefenderStats = stats.NewStatsValue(300, 20, 40, 40, 250, 30)
 
 	actual := c.Calculate()
 	expect := []uint{117, 118, 120, 121, 122, 124, 125, 126, 128, 129, 131, 132, 133, 135, 136, 138}
