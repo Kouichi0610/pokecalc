@@ -37,7 +37,6 @@ func (c *Calculator) Enable() bool {
 }
 
 // ダメージ計算
-// TODO:計算式については要検証。特に計算順
 func (c *Calculator) Calculate() []uint {
 	l := uint(c.AttackersLevel)
 	s := c.Skill.Power()
@@ -48,8 +47,9 @@ func (c *Calculator) Calculate() []uint {
 
 	res := make([]uint, 0)
 
-	for m := 0.85; m <= 1.0; m += 0.01 {
-		d = uint(float64(dmg) * m)
+	var m uint
+	for m = 85; m <= 100; m += 1 {
+		d = dmg * m / 100
 		res = append(res, d)
 	}
 	return res
