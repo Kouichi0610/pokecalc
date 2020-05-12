@@ -24,13 +24,13 @@ func (m *Mock) initialize() {
 	m.d = append(m.d, &data{id: 4, name: "ドダイトス", type1: types.Grass, type2: types.Ground, ability1: 0, ability2: 0, ability3: 0, hp: 95, attack: 109, defense: 105, spAttack: 75, spDefense: 85, speed: 56})
 }
 
-func (m *Mock) Load(id uint) (*stats.Species, *types.Types, error) {
+func (m *Mock) Load(name string) (*stats.Species, *types.Types, error) {
 	for _, p := range m.d {
-		if p.id == id {
+		if p.name == name {
 			s := p.Species()
 			t := p.Types()
 			return s, t, nil
 		}
 	}
-	return nil, nil, fmt.Errorf("%d not found.", id)
+	return nil, nil, fmt.Errorf("%s not found.", name)
 }

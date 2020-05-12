@@ -9,25 +9,35 @@ import (
 // ダメージ計算式
 type Calculator struct {
 	AttackersLevel stats.Level
-	Attacker       *Condition
+	AttackerType   *types.Types
+	AttackerStats  *stats.Stats
 	Skill          *skill.Skill
-	Defender       *Condition
+	DefenderType   *types.Types
+	DefenderStats  *stats.Stats
 }
 
 func New() *Calculator {
 	return &Calculator{
 		AttackersLevel: stats.NewLevel(1),
-		Attacker:       nil,
+		AttackerType:   nil,
+		AttackerStats:  nil,
 		Skill:          nil,
-		Defender:       nil,
+		DefenderType:   nil,
+		DefenderStats:  nil,
 	}
 }
 
 func (c *Calculator) Enable() bool {
-	if c.Attacker == nil {
+	if c.AttackerType == nil {
 		return false
 	}
-	if c.Defender == nil {
+	if c.AttackerStats == nil {
+		return false
+	}
+	if c.DefenderType == nil {
+		return false
+	}
+	if c.DefenderStats == nil {
 		return false
 	}
 	if c.Skill == nil {
@@ -37,19 +47,19 @@ func (c *Calculator) Enable() bool {
 }
 
 // ダメージ計算
-// TODO:計算式については要検証。特に計算順
 func (c *Calculator) Calculate() []uint {
 	l := uint(c.AttackersLevel)
 	s := c.Skill.Power()
 
-	a, d := c.Skill.PickStats(c.Attacker.Stats, c.Defender.Stats)
+	a, d := c.Skill.PickStats(c.AttackerStats, c.DefenderStats)
 	dmg := calc(l, s, a, d)
-	dmg = correct(dmg, c.Skill.Types(), c.Attacker.Types, c.Defender.Types)
+	dmg = correct(dmg, c.Skill.Types(), c.AttackerType, c.DefenderType)
 
 	res := make([]uint, 0)
 
-	for m := 0.85; m <= 1.0; m += 0.01 {
-		d = uint(float64(dmg) * m)
+	var m uint
+	for m = 85; m <= 100; m += 1 {
+		d = dmg * m / 100
 		res = append(res, d)
 	}
 	return res

@@ -6,5 +6,5 @@ import (
 )
 
 type Repository interface {
-	Load(id uint) (*stats.Species, *types.Types, error)
+	Load(name string) (*stats.Species, *types.Types, error)
 }
