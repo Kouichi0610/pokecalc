@@ -47,7 +47,7 @@ func Test_Calculate(t *testing.T) {
 	c.Defender = &Condition{Types: dt, Stats: ds}
 
 	actual := c.Calculate()
-	expect := []uint{114, 114, 120, 120, 120, 120, 120, 126, 126, 126, 126, 132, 132, 132, 132, 138}
+	expect := []uint{117, 118, 120, 121, 122, 124, 125, 126, 128, 129, 131, 132, 133, 135, 136, 138}
 	if !reflect.DeepEqual(actual, expect) {
 		t.Errorf("Actual %v", actual)
 		t.Errorf("Expect %v", expect)
@@ -79,22 +79,5 @@ func Test_Calc(t *testing.T) {
 
 	if actual != expect {
 		t.Errorf("Failed Damage Expect %d Actual %d", expect, actual)
-	}
-}
-
-func Test_CalcArray(t *testing.T) {
-	const l uint = 50
-	const s uint = 100
-	const a uint = 182
-	const d uint = 55
-
-	actual := calcArray(l, s, a, d)
-	expect := []uint{124, 126, 127, 129, 130, 132, 133, 135, 136, 138, 139, 141, 142, 144, 145, 147}
-	if len(actual) != 16 {
-		t.Errorf("array length %d", len(actual))
-	}
-	if !reflect.DeepEqual(actual, expect) {
-		t.Errorf("Actual %v", actual)
-		t.Errorf("Expect %v", expect)
 	}
 }

@@ -43,12 +43,15 @@ func (c *Calculator) Calculate() []uint {
 	s := c.Skill.Power()
 
 	a, d := c.Skill.PickStats(c.Attacker.Stats, c.Defender.Stats)
-	res := calcArray(l, s, a, d)
+	dmg := calc(l, s, a, d)
+	dmg = correct(dmg, c.Skill.Types(), c.Attacker.Types, c.Defender.Types)
 
-	for i := 0; i < len(res); i++ {
-		res[i] = correct(res[i], c.Skill.Types(), c.Attacker.Types, c.Defender.Types)
+	res := make([]uint, 0)
+
+	for m := 0.85; m <= 1.0; m += 0.01 {
+		d = uint(float64(dmg) * m)
+		res = append(res, d)
 	}
-
 	return res
 }
 
@@ -81,19 +84,4 @@ func calc(l, s, a, d uint) uint {
 	tmp := l*2/5 + 2
 	tmp = tmp * s * a / d
 	return tmp/50 + 2
-}
-
-/*
-	取りうるダメージ値を全て取得
-	(0.85〜1.0)
-*/
-func calcArray(l, s, a, d uint) []uint {
-	res := make([]uint, 0)
-
-	for m := 0.85; m <= 1.0; m += 0.01 {
-		d := calc(l, s, a, d)
-		d = uint(float64(d) * m)
-		res = append(res, d)
-	}
-	return res
 }
