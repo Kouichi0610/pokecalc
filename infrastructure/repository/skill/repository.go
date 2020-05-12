@@ -5,5 +5,5 @@ import (
 )
 
 type Repository interface {
-	Load(id uint) (*skill.Skill, error)
+	Load(name string) (*skill.Skill, error)
 }

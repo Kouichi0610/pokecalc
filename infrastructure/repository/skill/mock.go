@@ -26,11 +26,11 @@ func (m *Mock) initialize() {
 	m.d = append(m.d, &data{id: 6, name: "イカサマ", ty: types.Dark, category: skill.FoulPlay, power: 90, accuracy: 100})
 }
 
-func (m *Mock) Load(id uint) (*skill.Skill, error) {
+func (m *Mock) Load(name string) (*skill.Skill, error) {
 	for _, p := range m.d {
-		if p.id == id {
+		if p.name == name {
 			return p.Skill(), nil
 		}
 	}
-	return nil, fmt.Errorf("%d not found.", id)
+	return nil, fmt.Errorf("%s not found.", name)
 }
